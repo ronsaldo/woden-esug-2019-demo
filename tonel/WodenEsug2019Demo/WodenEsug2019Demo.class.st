@@ -157,7 +157,7 @@ WodenEsug2019Demo class >> createChimneyParticleSystem: particleSystem [
 		particleAttenuation := particleAttenuation * (particleState lifeTime smoothStepFrom: 0.0 to: 0.3).
 		particleAttenuation := particleAttenuation * (1.0 - (particleState position length smoothStepFrom: 7.0 to: 10.0)).
 		
-		color := Float32x4 zero.
+		color := Float32x4 x: 0 y: 0 z: 0 w: 0.
 		particleAttenuation > 0.0 ifTrue: [ 
 			position := (Float32x3 x: s - 0.5 y: t -0.5 z: 0.0) * particleState size.
 			smokeNoise := (position*0.5 +
@@ -311,7 +311,7 @@ WodenEsug2019Demo class >> createVolcanoParticleSystem: particleSystem [
 		particleAttenuation := particleAttenuation * (particleState lifeTime smoothStepFrom: 0.0 to: 0.3).
 		particleAttenuation := particleAttenuation * (1.0 - (particleState position length smoothStepFrom: 1000.0 to: 2000.0)).
 		
-		color := Float32x4 zero.
+		color := Float32x4 x: 0 y: 0 z: 0 w: 0.
 		particleAttenuation > 0.0 ifTrue: [ 
 			position := (Float32x3 x: s - 0.5 y: t -0.5 z: 0.0) * particleState size.
 			smokeNoise := (position*0.002 +
