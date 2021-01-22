@@ -1,6 +1,6 @@
 Class {
 	#name : #WodanicDashboardView,
-	#superclass : #WDAViewWithBabylon,
+	#superclass : #WDAView,
 	#category : #WodenEsug2019Demo
 }
 
