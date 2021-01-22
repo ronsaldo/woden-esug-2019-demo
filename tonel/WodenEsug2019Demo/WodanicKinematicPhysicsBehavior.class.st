@@ -90,8 +90,8 @@ WodanicKinematicPhysicsBehavior >> helmWheelSceneNode: anObject [
 { #category : #simulation }
 WodanicKinematicPhysicsBehavior >> initialize [
 	super initialize.
-	linearVelocity := WMVector3F zero.
-	linearAcceleration := WMVector3F zero.
+	linearVelocity := Float32x3 zeros.
+	linearAcceleration := Float32x3 zeros.
 	engineAcceleration := 0.0.
 	engineDirection := 0.0.
 	turnDirection := 0.0.
@@ -113,8 +113,8 @@ WodanicKinematicPhysicsBehavior >> initialize [
 
 { #category : #simulation }
 WodanicKinematicPhysicsBehavior >> isMoving [
-	(linearVelocity closeTo: WMVector3F zero) ifFalse: [ ^ true ].
-	(linearAcceleration closeTo: WMVector3F zero) ifFalse: [ ^ true ].
+	(linearVelocity closeTo: Float32x3 zeros) ifFalse: [ ^ true ].
+	(linearAcceleration closeTo: Float32x3 zeros) ifFalse: [ ^ true ].
 	(engineAcceleration closeTo: 0.0) ifFalse: [ ^ true ].
 	(helmAngleFactor closeTo: 0.0) ifFalse: [ ^ true ].
 	^  false
@@ -171,8 +171,8 @@ WodanicKinematicPhysicsBehavior >> prePhysicsTick: delta [
 	helmWheelAngle := maxHelmWheelAngle * helmAngleFactor.
 
 	helmWheelSceneNode ifNotNil: [
-		helmWheelSceneNode transform: (WMReversibleAffineTransformF identity
-			orthonormal: (WMMatrix3F zrot: helmWheelAngle negated) translation: helmWheelSceneNode position)
+		helmWheelSceneNode transform: (ReversibleAffineTransform3dF32 identity
+			orthonormal: (Float32x3x3 zRotation: helmWheelAngle negated) translation: helmWheelSceneNode position)
 	].
 
 	engineSoundSource ifNotNil: [
@@ -188,13 +188,13 @@ WodanicKinematicPhysicsBehavior >> prePhysicsTick: delta [
 	
 	self isMoving ifFalse: [ ^ self ].
 	
-	helmRotation := WMMatrix3F yrot: helmAngle negated.
+	helmRotation := Float32x3x3 yRotation: helmAngle negated.
 	
 	angularVelocity := helmAngle negated * (engineAcceleration / maxAccel) * 0.2.
 	
 	oldTransform := self ownerEntity transform.
 
-	linearAcceleration := (oldTransform transformVector3: (helmRotation transformVector3: (WMVector3F z: engineAcceleration negated)))
+	linearAcceleration := (oldTransform transformVector: (helmRotation * (Float32x3 z: engineAcceleration negated)))
 		- (linearVelocity*linearDamping).
 	linearVelocity := linearVelocity + (linearAcceleration*delta).
 	currentDriver ifNotNil: [ 
@@ -202,8 +202,8 @@ WodanicKinematicPhysicsBehavior >> prePhysicsTick: delta [
 	].
 
 	self ownerEntity
-		transform: (WMReversibleAffineTransformF identity
-			orthonormal: (WMMatrix3F yrot: angularVelocity *delta) * oldTransform matrix translation: oldTransform translation + (linearVelocity * delta))
+		transform: (ReversibleAffineTransform3dF32 identity
+			orthonormal: (Float32x3x3 yRotation: angularVelocity *delta) * oldTransform matrix translation: oldTransform translation + (linearVelocity * delta))
 ]
 
 { #category : #accessing }

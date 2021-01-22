@@ -20,7 +20,7 @@ WodanicDrivingCharacterController >> activateUseCommand [
 
 { #category : #'as yet unclassified' }
 WodanicDrivingCharacterController >> applyVehicleAngleDelta: angleDelta [
-	character headAngle: character headAngle + (WMVector3F y: angleDelta)
+	character headAngle: character headAngle + (Float32x3 y: angleDelta)
 ]
 
 { #category : #accessing }
@@ -32,7 +32,7 @@ WodanicDrivingCharacterController >> character: aCharacter [
 { #category : #initialization }
 WodanicDrivingCharacterController >> initialize [
 	super initialize.
-	driverEntryPosition := WMVector3F zero.
+	driverEntryPosition := Float32x3 zeros.
 	drivingTime := 0.0.
 ]
 
@@ -57,5 +57,5 @@ WodanicDrivingCharacterController >> prePhysicsTick: delta [
 
 { #category : #hooks }
 WodanicDrivingCharacterController >> vehicleDriverPosition [
-	^ driverEntryPosition interpolateTo: (vehicle sectorTransform transformPosition3: localDriverPosition) at: (drivingTime smoothStepFrom: 0.0 to: 0.8)
+	^ driverEntryPosition interpolateTo: (vehicle sectorTransform transformPosition: localDriverPosition) at: (drivingTime smoothStepFrom: 0.0 to: 0.8)
 ]
